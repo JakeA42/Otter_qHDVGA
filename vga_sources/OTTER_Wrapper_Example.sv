@@ -38,33 +38,25 @@ module OTTER_Wrapper(
     logic vga_vblank;
    
     // Connect Board peripherals (Memory Mapped IO devices) to IOBUS /////////
-    always_ff @ (posedge sclk)
-    begin
-        if(IOBUS_wr)
-            case(IOBUS_addr)
-                LEDS_AD: LEDS <= IOBUS_out;    
-                SSEG_AD: r_SSEG <= IOBUS_out[15:0];
-            endcase
-    end
-   
     always_comb
     begin
         IOBUS_in=32'b0;
         case(IOBUS_addr)
             SWITCHES_AD: IOBUS_in[15:0] = SWITCHES;
             ENC_AD: IOBUS_in[3:0] = enc_val;
-            VBLANK_AD: IOBUS_in[0] = vga_vblank;
+            VBLANK_AD: IOBUS_in[0] = vga_vblank; // New line
             default: IOBUS_in=32'b0;
         endcase
     end
     
-    // VGA //////////
+    // VGA ///////////////////////
+    // A buffer is used to prevent data corruption
     logic [15:0] vram_addr_buf;
     logic [31:0] vram_data_buf;
     logic vram_wr_buf;
     always_ff @(posedge sclk) begin
         if (IOBUS_wr && IOBUS_addr >= VRAM) begin
-            // Offset to get word-aligned addresses
+            // Offset bits to get word-aligned addresses
             vram_addr_buf <= IOBUS_addr[17:2];
             vram_data_buf <= IOBUS_out;
             vram_wr_buf <= 1;
