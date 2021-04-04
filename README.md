@@ -75,7 +75,7 @@ Storing the number `0b11010000101101000010110111111111` (`0xd0b42dff`) to a word
 ### Layout & Addressing
 The x and y address ports are intended to be connected to the IOBUS_ADDR line such that each vram address is arranged sequentially from the otter's perspective. (See the example wrapper file for connection specifics)
 
-By default, the vram starts at address `0xfff00000` (top left on the screen) and ends at `0xfff21c00` (bottom right, in the blank area) with increments of 4 for each word (like the otter_memory). The start address is defined in the wrapper as the localparam VRAM.
+By default, the vram starts at address `0xfff00000` (top left on the screen) and ends at `0xfff21c00` (bottom right, in the blank area) with increments of 4 for each word (like the otter_memory). The start address is defined in the wrapper as the localparam VRAM. 
 
 
 
@@ -85,8 +85,9 @@ By default, the vram starts at address `0xfff00000` (top left on the screen) and
 2. In your OTTER project, go to Add sources > Add design sources > Add directories
 3. Find the downloaded Otter_qHDVGA folder and choose /vga_sources/vga
 4. Press Finish to complete the import
-5. Copy and paste from the example wrapper file to connect the VGA to the OTTER and rename signals if necessary for your implementation.
+5. Copy and paste from the example wrapper file to connect the VGA to the OTTER and rename signals if necessary for your implementation
+6. Copy and paste the vga constraints into your constraints file
 
 ## Tips
-* For simplicity, keep graphics aligned to the 16 pixel blocks. (Bit shifting can be used to offset within a block).
+* For simplicity, keep graphics aligned to the 16 pixel blocks when possible. (Bit shifting can be used to offset within a block).
 * The vram is write-only. To change this, you can re-customize the blk_mem_gen_0 ip, change it to a "true dual port ram" and make the appropriate connections. This may require adjustments to the buffer for correct timing.
